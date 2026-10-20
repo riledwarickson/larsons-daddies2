@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Larsons daddies</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#0b0d10;color:#f4f5f7;font:14px/1.4 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+main{max-width:820px;margin:auto;padding:20px}.eyebrow{color:#9da3ad;font-size:11px;letter-spacing:.14em;text-transform:uppercase;font-weight:800}
+h1{font-size:38px;line-height:1;margin:6px 0}.sub{color:#9da3ad}
+nav{display:flex;gap:6px;overflow:auto;margin:18px 0}button{background:#171a20;color:#aeb4be;border:1px solid #292e37;border-radius:10px;padding:10px 12px;font-weight:750;white-space:nowrap;cursor:pointer}button.active{background:#202b43;color:white;border-color:#48618e}
+.card{background:#171a20;border:1px solid #292e37;border-radius:16px;padding:16px;margin:10px 0}.muted{color:#9da3ad;font-size:12px}.row{display:grid;grid-template-columns:32px 1fr 65px;gap:10px;align-items:center;padding:12px 0;border-bottom:1px solid #292e37;cursor:pointer}.row:last-child{border:0}.rank{font-size:19px;font-weight:900;color:#9da3ad}.name{font-weight:850}.barbg{height:7px;background:#292e37;border-radius:99px;margin-top:5px;overflow:hidden}.bar{height:100%;background:#7aa7ff;border-radius:99px}.score{text-align:right;font-weight:900}.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}.stat{background:#101318;border:1px solid #292e37;border-radius:12px;padding:12px}.stat b{display:block;font-size:22px}.stat small{color:#9da3ad;text-transform:uppercase;font-size:10px;letter-spacing:.08em}.callout{border-left:3px solid #7aa7ff;background:#101318;padding:11px 12px;margin-top:10px;border-radius:0 10px 10px 0}.green{border-color:#79c89b}.red{border-color:#ef6f91}.players{margin-top:10px}.player{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #292e37}.hidden{display:none}.chart{display:flex;align-items:flex-end;gap:6px;height:190px;border-bottom:1px solid #292e37;padding:15px 3px 0;margin-top:10px}.col{flex:1;display:flex;height:100%;flex-direction:column;justify-content:flex-end;align-items:center}.col .v{font-size:9px;color:#9da3ad;margin-bottom:3px}.shape{width:100%;max-width:42px;background:#79c89b;border-radius:5px 5px 0 0}.label{font-size:9px;color:#9da3ad;text-align:center;margin-top:5px;line-height:1.05}.teamnav{display:flex;gap:6px;overflow:auto;padding-bottom:6px}.teamnav button{font-size:11px;padding:8px 9px}.foot{color:#777d87;font-size:10px;padding:14px 0 20px}
+@media(max-width:500px){main{padding:15px}h1{font-size:32px}}
+</style>
+</head>
+<body><main>
+<div class="eyebrow">Big Penix · 2026 · 10 teams</div>
+<h1>Larsons daddies</h1>
+<div class="sub">Power rankings, roster strength, luck, draft value, and the increasingly questionable decisions of ten adults.</div>
+<nav>
+<button class="active" onclick="tab('power',this)">Power Rankings</button>
+<button onclick="tab('rosters',this)">Rosters</button>
+<button onclick="tab('luck',this)">Luck & Record</button>
+<button onclick="tab('draft',this)">Draft</button>
+</nav>
+
+<section id="power">
+<div class="card"><b>Power Rankings</b><div class="muted">Composite score weighted toward current roster strength.</div><div id="rank"></div></div>
+<div class="card"><b>Current roster power</b><div class="muted">Best possible lineup from each current roster.</div><div id="rosterChart" class="chart"></div></div>
+<div class="card">
+<div class="callout green"><b>Slam's Smart Team</b> gets the top spot, combining 5–1 record, 136.73 PPG and 36 all-play wins.</div>
+<div class="callout"><b>Lil Ziggy the H...</b> has the strongest current roster by optimal-lineup points at 853.42.</div>
+<div class="callout red"><b>Biff’s Almanac</b> is the 3–3 team nobody should want to see in the playoffs: 813.58 points and 35 all-play wins.</div>
+</div>
+</section>
+
+<section id="rosters" class="hidden">
+<div class="card"><b>Roster explorer</b><div class="teamnav" id="teamnav"></div><div id="detail"></div></div>
+</section>
+
+<section id="luck" class="hidden">
+<div class="card"><b>Record vs. reality</b><div class="muted">Expected wins = all-play wins ÷ 9. Luck = actual wins − expected wins.</div><div id="luckChart" class="chart"></div><div id="luckRows"></div></div>
+</section>
+
+<section id="draft" class="hidden">
+<div class="card"><b>Retained draft production</b><div class="muted">Current-season points from players still on their original drafting team's roster. This is not a true draft grade.</div><div id="draftChart" class="chart"></div><div id="draftRows"></div></div>
+</section>
+
+<div class="foot">Data snapshot: ESPN exports supplied for Big Penix. Completed-week performance uses Weeks 1–6. Transaction history and historical starting lineups were not included, so true waiver efficiency, trade grades and points-left-on-bench are not claimed.</div>
+</main>
+<script>
+const T=[
+{name:"Slam's Smart Team",best:833.60,ppg:136.73,all:36,w:5,ret:975.80,n:14,p:[["Jahmyr Gibbs",153.7],["Brock Purdy",134],["Christian Watson",118.8],["Parker Washington",91.9],["DeVonta Smith",69]]},
+{name:"Lil Ziggy the H...",best:853.42,ppg:131.63,all:33,w:4,ret:1190.32,n:15,p:[["Jaxon Smith-Njigba",164.86],["Josh Allen",161.26],["Kyren Williams",119],["Davante Adams",102],["Mike Evans",89]]},
+{name:"Biff’s Almanac",best:804.28,ppg:135.60,all:35,w:3,ret:979.28,n:13,p:[["Kenneth Walker III",138],["Bijan Robinson",128.5],["Matthew Golden",100.7],["Tetairoa McMillan",89.1],["Drake London",88.4]]},
+{name:"Last of the Atl...",best:768.32,ppg:125.83,all:32,w:5,ret:960.32,n:14,p:[["CeeDee Lamb",131.1],["Jonathan Taylor",118.5],["Chris Olave",113],["D’Andre Swift",103.8]]},
+{name:"Jim's Finest Team",best:752.70,ppg:117.34,all:29,w:4,ret:959.12,n:14,p:[["James Cook III",113.6],["Drake Maye",111.02],["Amon-Ra St. Brown",104.2],["Garrett Wilson",94.8]]},
+{name:"4th and Incels",best:717.36,ppg:123.28,all:31,w:5,ret:616.44,n:9,p:[["Derrick Henry",116.8],["Bryce Young",110.46],["Malik Nabers",102.4],["Joe Burrow",101.24]]},
+{name:"GOAT chakras",best:723.16,ppg:115.78,all:29,w:3,ret:805.66,n:13,p:[["Christian McCaffrey",122],["Dak Prescott",104.86],["Trey McBride",103.1],["Zay Flowers",94.5]]},
+{name:"C.LITtle",best:634.24,ppg:107.33,all:20,w:1,ret:841.42,n:15,p:[["Ashton Jeanty",100.4],["Puka Nacua",91.8],["George Kittle",89.7],["Nico Collins",73.5]]},
+{name:"Damien Swann The...",best:646.96,ppg:103.47,all:19,w:0,ret:902.82,n:12,p:[["Jordan Love",110.36],["Matthew Stafford",105.86],["Chuba Hubbard",98.1],["Bucky Irving",85.6]]},
+{name:"Robert's Remarkables",best:652,ppg:86.76,all:6,w:0,ret:1045.62,n:16,p:[["Trevor Lawrence",114.2],["Javonte Williams",109],["Isaiah Likely",109.3],["Jaylen Warren",102.8],["Patrick Mahomes",94.06]]}
+];
+function norm(k){let a=T.map(x=>x[k]),lo=Math.min(...a),hi=Math.max(...a);T.forEach(x=>x[k+'n']=(x[k]-lo)/(hi-lo)*100)}
+norm('best');norm('ppg');norm('all');T.forEach(x=>x.score=.5*x.bestn+.25*x.ppgn+.25*x.alln);T.sort((a,b)=>b.score-a.score);
+rank.innerHTML=T.map((x,i)=>`<div class=row onclick="show('${x.name}')"><div class=rank>${i+1}</div><div><div class=name>${x.name}</div><div class=barbg><div class=bar style="width:${x.score}%"></div></div></div><div class=score>${x.score.toFixed(1)}</div></div>`).join('');
+function bars(id,key,fmt,green=true){let A=[...T].sort((a,b)=>b[key]-a[key]),hi=Math.max(...A.map(x=>x[key]));document.getElementById(id).innerHTML=A.map(x=>`<div class=col><div class=v>${fmt(x[key])}</div><div class=shape style="height:${Math.max(4,x[key]/hi*140)}px;${green?'':'background:#ef6f91'}"></div><div class=label>${x.name}</div></div>`).join('')}
+bars('rosterChart','best',x=>x.toFixed(0));
+function show(name){let x=T.find(y=>y.name===name)||T[0];document.getElementById('detail').innerHTML=`<div class=grid><div class=stat><b>${x.score.toFixed(1)}</b><small>Power score</small></div><div class=stat><b>${x.best.toFixed(1)}</b><small>Optimal lineup</small></div><div class=stat><b>${x.ppg.toFixed(1)}</b><small>PPG through W6</small></div><div class=stat><b>${x.all}</b><small>All-play wins</small></div></div><div class=players>${x.p.map(p=>`<div class=player><span>${p[0]}</span><b>${p[1].toFixed(1)}</b></div>`).join('')}</div><div class="callout ${x.w>=5?'green':x.w<=1?'red':''}"><b>${x.name}</b> is ${x.w}-${6-x.w} through Week 6.</div>`}
+teamnav.innerHTML=T.map(x=>`<button onclick="show('${x.name}')">${x.name}</button>`).join('');show(T[0].name);
+const L=T.map(x=>({...x,exp:x.all/9,luck:x.w-x.all/9})).sort((a,b)=>b.luck-a.luck);
+let ml=Math.max(...L.map(x=>Math.abs(x.luck)));luckChart.innerHTML=L.map(x=>`<div class=col><div class=v>${x.luck>=0?'+':''}${x.luck.toFixed(2)}</div><div class=shape style="height:${Math.max(4,Math.abs(x.luck)/ml*140)}px;background:${x.luck>=0?'#79c89b':'#ef6f91'}"></div><div class=label>${x.name}</div></div>`).join('');
+luckRows.innerHTML=L.map(x=>`<div class=player><span><b>${x.name}</b><br><span class=muted>${x.w} actual · ${x.exp.toFixed(2)} expected</span></span><b>${x.luck>=0?'+':''}${x.luck.toFixed(2)}</b></div>`).join('');
+bars('draftChart','ret',x=>x.toFixed(0));draftRows.innerHTML=[...T].sort((a,b)=>b.ret-a.ret).map(x=>`<div class=player><span><b>${x.name}</b><br><span class=muted>${x.n} retained drafted players</span></span><b>${x.ret.toFixed(1)}</b></div>`).join('');
+function tab(id,b){document.querySelectorAll('section').forEach(x=>x.classList.add('hidden'));document.getElementById(id).classList.remove('hidden');document.querySelectorAll('nav button').forEach(x=>x.classList.remove('active'));b.classList.add('active')}
+</script>
+</body></html>
